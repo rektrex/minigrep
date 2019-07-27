@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 use std::process;
+use std::error::Error;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -10,10 +11,15 @@ fn main() {
         process::exit(1);
     });
 
-    let contents = fs::read_to_string(&config.filename)
-        .expect("Something went wrong reading the file");
+    run(config);
+}
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(&config.filename)?;
 
     println!("Contents of {}:\n{}", config.filename, contents);
+
+    Ok(())
 }
 
 struct Config {
